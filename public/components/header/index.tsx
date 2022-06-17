@@ -4,8 +4,9 @@ import { Icon } from "@iconify/react";
 
 type HeaderInformsProps = {  
   infor:(informs:string) => void;
+  favorites:() => void;
 }
-export default function Header({infor}:HeaderInformsProps) {
+export default function Header({infor, favorites}:HeaderInformsProps) {
   const [search, setSearch] = useState("");
   function sendSearch() {
     infor(search);
@@ -30,7 +31,7 @@ export default function Header({infor}:HeaderInformsProps) {
             onClick={sendSearch}
           />
         </SearchBar>
-        <Icon icon="ant-design:star-filled" color="yellow" width={45} />
+        <Icon onClick={favorites} icon="ant-design:star-filled" color="yellow" width={45} />
       </Content>
     </Container>
   );

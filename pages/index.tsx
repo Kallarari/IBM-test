@@ -8,10 +8,18 @@ import Footer from "../public/components/footer";
 import BookInforms from "../public/components/bookInforms";
 
 const Home: React.FC = () => {
-  const [showInform, setShowInform] = useState("");
+  var favorites:any;
   const [search, setSearch] = useState("jogos");
   const [searchResult, setSearchResult] = useState(Array);
   const [singleBookInform, setSingleBookInform] = useState();
+  function handleFavorites() {/* 
+    let pessoaString = localStorage.getItem('favorites');
+    let pessoaObj = JSON.parse(pessoaString);
+    if(pessoaString===undefined){
+      window.alert("Você não tem nenhum livro salvo")
+    }
+    console.log(pessoaString); */
+  }
   useEffect(() => {
     axios
       .get("https://www.googleapis.com/books/v1/volumes?q=" + search, {
@@ -32,6 +40,7 @@ const Home: React.FC = () => {
         <title>Books</title>
       </Head>
       <Header
+      favorites={handleFavorites}
         infor={(search) => {
           setSearch(search);
         }}
@@ -59,7 +68,7 @@ const Home: React.FC = () => {
             />
           ))
         ) : (
-          <BookInforms clearBookInformation={()=>setSingleBookInform(undefined)} bookInformation={singleBookInform} />
+          <BookInforms setFavorites={()=>{}} clearBookInformation={()=>setSingleBookInform(undefined)} bookInformation={singleBookInform} />
         )}
       </MainContent>
       <Footer />

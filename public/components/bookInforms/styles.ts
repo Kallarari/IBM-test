@@ -17,6 +17,13 @@ export const Title = styled.h1`
   margin-right: 45px;
   }
 `;
+export const FavoriteButton = styled.div`
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 100%;
+`
 export const BackButton = styled.div`
   display: flex;
   align-items: center;
