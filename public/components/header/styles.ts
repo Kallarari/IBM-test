@@ -39,11 +39,14 @@ export const Content = styled.div`
   align-items: center;
   padding: 10px 20px 0 20px;
   @media screen and (max-width: 600px) {
-    padding-top:30px;
+    padding-top: 30px;
   }
 `;
 export const Container = styled.div`
-  width: 100vw;
-  height: 120px;
+  width: 100%;
+  height: 12vh;
   background: linear-gradient(225deg, #004688 0%, #09bbed 100%);
+  @media screen and (max-width: 600px) {
+    height: 100px;
+  }
 `;

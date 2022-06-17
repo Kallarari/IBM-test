@@ -9,10 +9,25 @@ export const ImageArea = styled.div`
   align-content: center;
   align-items: center;
   display: flex;
+  img{
+    max-width: 160px;
+  }
 `;
 export const PriceArea = styled.div`
   height: 20%;
   border-radius: 10px;
+`;
+
+export const BookName = styled.h1`
+color: grey;
+font-size: small;
+text-align: center;
+margin:0;
+`;
+export const Price = styled.h1`
+color: grey;
+margin: 0;
+text-align: center;
 `;
 export const Container = styled.div`
   width: 220px;
