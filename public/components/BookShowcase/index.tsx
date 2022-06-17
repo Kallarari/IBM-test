@@ -7,10 +7,11 @@ type BookShowcaseProps = {
   price: string;
   id:string;
   bookName:string;
+  seeBook:(bookID:string) => void;
 }
-export default function BookShowcase({ imageLink, price, id, bookName}: BookShowcaseProps) {
+export default function BookShowcase({ imageLink, price, id, bookName, seeBook}: BookShowcaseProps) {
   return (
-    <Container>
+    <Container onClick={()=>seeBook(id)}>
       <ImageArea>
         <img src={imageLink} />
       </ImageArea>
