@@ -11,16 +11,13 @@ const Home: React.FC = () => {
   const [search, setSearch] = useState("jogos");
   const [searchResult, setSearchResult] = useState(Array);
   const [singleBookInform, setSingleBookInform] = useState();
-
+//checks if was an favorite link and show in screen
   async function handleFavorites() {
     let favorites = JSON.parse(sessionStorage.getItem("favorites"));
-    console.log("antes do if");
     if (favorites?.length >= 1) {
-      console.log(favorites);
       setSearchResult(favorites);
       setSingleBookInform(undefined);
     } else {
-      console.log("else");
       window.alert("Você não tem nenhum livro salvo");
       await axios
         .get("https://www.googleapis.com/books/v1/volumes?q=" + search, {
@@ -33,6 +30,7 @@ const Home: React.FC = () => {
     }
     setSingleBookInform(undefined);
   }
+  //if the serch information chages the serch result changes too
   useEffect(() => {
     axios
       .get("https://www.googleapis.com/books/v1/volumes?q=" + search, {
@@ -43,6 +41,7 @@ const Home: React.FC = () => {
         setSingleBookInform(undefined);
       });
   }, [search]);
+  //function that get a single book information and sand to bookShowcase page
   function handleSeeBook(bookID: string) {
     axios.get(bookID).then((resp) => {
       setSingleBookInform(resp.data);
@@ -60,7 +59,8 @@ const Home: React.FC = () => {
         }}
       />
       <MainContent>
-        {singleBookInform === undefined ? (
+        {/*if you are look for a single book and its really exist you will see it! */}
+        {singleBookInform === undefined ? ( 
           searchResult.map((item: any, key: number) => (
             <BookShowcase
               seeBook={(seeBook) => {
@@ -81,7 +81,7 @@ const Home: React.FC = () => {
               bookName={item?.volumeInfo.title}
             />
           ))
-        ) : (
+        ) : (          
           <BookInforms
             clearBookInformation={() => setSingleBookInform(undefined)}
             bookInformation={singleBookInform}

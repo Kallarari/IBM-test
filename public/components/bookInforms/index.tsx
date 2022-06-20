@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+//next-images is recomended by next, but is'nt necessary to use
 import { Icon } from "@iconify/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -21,7 +23,9 @@ export default function BookInforms({
   clearBookInformation,
 }: BookInformsProps) {
   const [addOrRemoveFavorite, setAddOrRemoveFavorite] = useState(false);
+  //the organiation of the favorites'array is the same of google
   var savedFavorites: Array<string> = [];
+  //checks if the book is favorite
   useEffect(() => {
     savedFavorites = JSON.parse(sessionStorage.getItem("favorites"));
     for (let i = 0; i < savedFavorites.length; i++) {
@@ -30,6 +34,7 @@ export default function BookInforms({
       }
     }
   }, []);
+  //Remove an book from the favorites
   async function handleRemoveFavorite() {
     savedFavorites = JSON.parse(sessionStorage.getItem("favorites"));
     if(savedFavorites.length === 1){
@@ -44,20 +49,18 @@ export default function BookInforms({
     }
     setAddOrRemoveFavorite(false);
   }
+  //save one book from favores
   async function handleSaveFavorite() {
     if (sessionStorage.getItem("favorites") === null) {
-      axios.get(bookInformation.selfLink).then((resp) => {
+      await axios.get(bookInformation.selfLink).then((resp) => {
         savedFavorites.push(resp.data);
         sessionStorage.setItem("favorites", JSON.stringify(savedFavorites));
       });
     } else {
-      savedFavorites = JSON.parse(sessionStorage.getItem("favorites"));
-      console.log(savedFavorites);
+      savedFavorites = JSON.parse(sessionStorage.getItem("favorites")===null);
       await axios.get(bookInformation.selfLink).then((resp) => {
         savedFavorites.push(resp.data);
       });
-      console.log(savedFavorites);
-
       sessionStorage.setItem("favorites", JSON.stringify(savedFavorites));
     }
     setAddOrRemoveFavorite(true);

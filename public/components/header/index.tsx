@@ -7,17 +7,22 @@ type HeaderInformsProps = {
   favorites: () => void;
 };
 export default function Header({ infor, favorites }: HeaderInformsProps) {
+  //set the search argument and send
   const [search, setSearch] = useState("");
   function sendSearch() {
     infor(search);
-    console.log(search);
   }
   return (
     <Container>
       <Content>
-        <TitleLogo>BOOKS.com</TitleLogo>
+        <TitleLogo onClick={sendSearch}>BOOKS.com</TitleLogo>
         <SearchBar>
-          <form onSubmit={sendSearch}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              sendSearch();
+            }}
+          >
             <input
               onChange={(e) => {
                 setSearch(e.target.value);

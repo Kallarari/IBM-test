@@ -28,6 +28,7 @@ export const SearchBar = styled.div`
 `;
 export const TitleLogo = styled.h1`
   color: white;
+  cursor: pointer;
   @media screen and (max-width: 600px) {
     display: none;
   }
