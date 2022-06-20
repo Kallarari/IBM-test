@@ -23,8 +23,8 @@ export default function BookInforms({
   clearBookInformation,
 }: BookInformsProps) {
   const [addOrRemoveFavorite, setAddOrRemoveFavorite] = useState(false);
-  //the organiation of the favorites'array is the same of google
-  var savedFavorites: Array<string> = [];
+  //the organization of the favorites'array is the same of google
+  var savedFavorites: Array<any> = [];
   //checks if the book is favorite
   useEffect(() => {
     savedFavorites = JSON.parse(sessionStorage.getItem("favorites"));
@@ -49,7 +49,7 @@ export default function BookInforms({
     }
     setAddOrRemoveFavorite(false);
   }
-  //save one book from favores
+  //save one book from favorites
   async function handleSaveFavorite() {
     if (sessionStorage.getItem("favorites") === null) {
       await axios.get(bookInformation.selfLink).then((resp) => {
@@ -57,7 +57,7 @@ export default function BookInforms({
         sessionStorage.setItem("favorites", JSON.stringify(savedFavorites));
       });
     } else {
-      savedFavorites = JSON.parse(sessionStorage.getItem("favorites")===null);
+      savedFavorites = JSON.parse(sessionStorage.getItem("favorites"));
       await axios.get(bookInformation.selfLink).then((resp) => {
         savedFavorites.push(resp.data);
       });
