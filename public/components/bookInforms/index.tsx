@@ -1,4 +1,5 @@
 import { Icon } from "@iconify/react";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
   BackButton,
@@ -14,14 +15,53 @@ import {
 type BookInformsProps = {
   bookInformation: any;
   clearBookInformation: () => void;
-  setFavorites: (bookID:string) => void;
 };
 export default function BookInforms({
   bookInformation,
   clearBookInformation,
-  setFavorites,
 }: BookInformsProps) {
-  const [starColor, setStarColor] = useState("grey");
+  const [addOrRemoveFavorite, setAddOrRemoveFavorite] = useState(false);
+  var savedFavorites: Array<string> = [];
+  useEffect(() => {
+    savedFavorites = JSON.parse(sessionStorage.getItem("favorites"));
+    for (let i = 0; i < savedFavorites.length; i++) {
+      if (savedFavorites[i].selfLink === bookInformation.selfLink) {
+        setAddOrRemoveFavorite(true);
+      }
+    }
+  }, []);
+  async function handleRemoveFavorite() {
+    savedFavorites = JSON.parse(sessionStorage.getItem("favorites"));
+    if(savedFavorites.length === 1){
+      savedFavorites=[];
+      sessionStorage.setItem("favorites", JSON.stringify(savedFavorites)); 
+    }
+    for (let i = 0; i < savedFavorites.length; i++) {
+      if (savedFavorites[i].selfLink === bookInformation.selfLink) {
+        savedFavorites.splice(i,1);
+        sessionStorage.setItem("favorites", JSON.stringify(savedFavorites));        
+      }
+    }
+    setAddOrRemoveFavorite(false);
+  }
+  async function handleSaveFavorite() {
+    if (sessionStorage.getItem("favorites") === null) {
+      axios.get(bookInformation.selfLink).then((resp) => {
+        savedFavorites.push(resp.data);
+        sessionStorage.setItem("favorites", JSON.stringify(savedFavorites));
+      });
+    } else {
+      savedFavorites = JSON.parse(sessionStorage.getItem("favorites"));
+      console.log(savedFavorites);
+      await axios.get(bookInformation.selfLink).then((resp) => {
+        savedFavorites.push(resp.data);
+      });
+      console.log(savedFavorites);
+
+      sessionStorage.setItem("favorites", JSON.stringify(savedFavorites));
+    }
+    setAddOrRemoveFavorite(true);
+  }
   return (
     <Container>
       <Header>
@@ -54,11 +94,19 @@ export default function BookInforms({
           ) : (
             <h2>Este produto não está em estoque!</h2>
           )}
-          <FavoriteButton onClick={()=>{sessionStorage.setItem('favorites', JSON.stringify(bookInformation.selfLink));setStarColor("yellow");}}>
-            <h1>Favoritar livro?</h1>
+          <FavoriteButton
+            onClick={
+              addOrRemoveFavorite ? handleRemoveFavorite : handleSaveFavorite
+            }
+          >
+            <h1>
+              {addOrRemoveFavorite
+                ? "Remover o livro dos favoritos"
+                : "Favoritar livro?"}
+            </h1>
             <Icon
               icon="ant-design:star-filled"
-              color={starColor}
+              color={addOrRemoveFavorite ? "yellow" : "grey"}
               width={45}
             ></Icon>
           </FavoriteButton>

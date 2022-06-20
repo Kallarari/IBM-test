@@ -15,13 +15,15 @@ export const SearchBar = styled.div`
   @media screen and (max-width: 600px) {
     width: 80%;
   }
-  .inputSearch {
+  form{
     width: 80%;
-    border: none;
-    outline: none;
     cursor: pointer;
+  }
+  .inputSearch {
+    border: none;
     color: grey;
     font-size: large;
+    outline: none;
   }
 `;
 export const TitleLogo = styled.h1`

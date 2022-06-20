@@ -8,17 +8,30 @@ import Footer from "../public/components/footer";
 import BookInforms from "../public/components/bookInforms";
 
 const Home: React.FC = () => {
-  var favorites:any;
   const [search, setSearch] = useState("jogos");
   const [searchResult, setSearchResult] = useState(Array);
   const [singleBookInform, setSingleBookInform] = useState();
-  function handleFavorites() {/* 
-    let pessoaString = localStorage.getItem('favorites');
-    let pessoaObj = JSON.parse(pessoaString);
-    if(pessoaString===undefined){
-      window.alert("Você não tem nenhum livro salvo")
+
+  async function handleFavorites() {
+    let favorites = JSON.parse(sessionStorage.getItem("favorites"));
+    console.log("antes do if");
+    if (favorites?.length >= 1) {
+      console.log(favorites);
+      setSearchResult(favorites);
+      setSingleBookInform(undefined);
+    } else {
+      console.log("else");
+      window.alert("Você não tem nenhum livro salvo");
+      await axios
+        .get("https://www.googleapis.com/books/v1/volumes?q=" + search, {
+          params: { startIndex: 0 },
+        })
+        .then((resp) => {
+          setSearchResult(resp.data.items);
+          setSingleBookInform(undefined);
+        });
     }
-    console.log(pessoaString); */
+    setSingleBookInform(undefined);
   }
   useEffect(() => {
     axios
@@ -31,8 +44,9 @@ const Home: React.FC = () => {
       });
   }, [search]);
   function handleSeeBook(bookID: string) {
-    axios.get(bookID)
-    .then((resp) => {setSingleBookInform(resp.data)}) 
+    axios.get(bookID).then((resp) => {
+      setSingleBookInform(resp.data);
+    });
   }
   return (
     <Container>
@@ -40,7 +54,7 @@ const Home: React.FC = () => {
         <title>Books</title>
       </Head>
       <Header
-      favorites={handleFavorites}
+        favorites={handleFavorites}
         infor={(search) => {
           setSearch(search);
         }}
@@ -68,7 +82,10 @@ const Home: React.FC = () => {
             />
           ))
         ) : (
-          <BookInforms setFavorites={()=>{}} clearBookInformation={()=>setSingleBookInform(undefined)} bookInformation={singleBookInform} />
+          <BookInforms
+            clearBookInformation={() => setSingleBookInform(undefined)}
+            bookInformation={singleBookInform}
+          />
         )}
       </MainContent>
       <Footer />
